@@ -23,6 +23,12 @@ type TodoItem struct {
 
 }
 
+type TodoItemCreation struct {
+	Title 		string 		`json:"title"`
+	Description string 		`json:"description"`
+	Status 		string 		`json:"status"`
+}
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -61,7 +67,7 @@ func main() {
 	{
 		items := v1.Group("/items")
 		{
-			items.POST("")
+			items.POST("", CreateItem())
 			items.GET("")
 			items.GET("/:id")
 			items.PATCH("/:id")
@@ -75,4 +81,21 @@ func main() {
 		})
 	})
 	r.Run(":3000") // port 3000
+}
+
+func CreateItem() func(*gin.Context) {
+	return func(c *gin.Context) {
+		var data TodoItemCreation
+
+		if err := c.ShouldBind(&data); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"data": data,
+		})
+	}
 }

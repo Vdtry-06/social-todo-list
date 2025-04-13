@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"github.com/joho/godotenv"
 )
 
 type TodoItem struct {
@@ -24,9 +24,14 @@ type TodoItem struct {
 }
 
 type TodoItemCreation struct {
-	Title 		string 		`json:"title"`
-	Description string 		`json:"description"`
-	Status 		string 		`json:"status"`
+	Id 			int 		`json:"-" gorm:"column:id"`
+	Title 		string 		`json:"title" gorm:"column:title;"`
+	Description string 		`json:"description" gorm:"column:description;"`
+	Status 		string 		`json:"status" gorm:"column:description;"`
+}
+
+func (TodoItemCreation) TableName() string {
+	return "todo_items"
 }
 
 func main() {
@@ -67,7 +72,7 @@ func main() {
 	{
 		items := v1.Group("/items")
 		{
-			items.POST("", CreateItem())
+			items.POST("", CreateItem(db))
 			items.GET("")
 			items.GET("/:id")
 			items.PATCH("/:id")
@@ -83,7 +88,7 @@ func main() {
 	r.Run(":3000") // port 3000
 }
 
-func CreateItem() func(*gin.Context) {
+func CreateItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
 		var data TodoItemCreation
 
@@ -94,8 +99,15 @@ func CreateItem() func(*gin.Context) {
 			return
 		}
 
+		if err := db.Create(&data).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
 		c.JSON(http.StatusOK, gin.H{
-			"data": data,
+			"data": data.Id,
 		})
 	}
 }

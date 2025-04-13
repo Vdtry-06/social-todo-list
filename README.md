@@ -1,9 +1,13 @@
 # social-todo-list
 
 ## Create evn
-`touch main.go`
-
-`go mod init main`
+- `touch main.go`
+- `go mod init main`
 
 ## Install Gin framework
-`go get -u github.com/gin-gonic/gin`
+- `go get -u github.com/gin-gonic/gin`
+
+## Install Gorm framework, mysql Database, env
+- `go get -u gorm.io/gorm`
+- `go get -u gorm.io/driver/mysql`
+-  `go get github.com/joho/godotenv`

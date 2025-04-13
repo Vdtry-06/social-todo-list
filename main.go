@@ -2,10 +2,15 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"github.com/joho/godotenv"
 )
 
 type TodoItem struct {
@@ -19,7 +24,18 @@ type TodoItem struct {
 }
 
 func main() {
-	fmt.Println("Hello, World!")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+	dsn := os.Getenv("DATABASE_URL")
+  	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	if err != nil {
+		log.Fatalln(err) // log.Fatal will print the error and exit the program
+	}
+	
+	fmt.Println(db)
 
 	now := time.Now().UTC()
 

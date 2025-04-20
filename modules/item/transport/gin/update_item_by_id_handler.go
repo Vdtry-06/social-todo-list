@@ -41,13 +41,6 @@ func UpdateItem(db *gorm.DB) func(*gin.Context) {
 			})
 			return
 		}
-		
-		// if err := db.Where("id = ?", id).Updates(&data).Error; err != nil {
-		// 	c.JSON(http.StatusNotFound, gin.H{
-		// 		"error": err.Error(),
-		// 	})
-		// 	return
-		// }
 		c.JSON(http.StatusOK, common.SimpleSuccessResponse(true))
 	}
 }

@@ -2,8 +2,6 @@ package main
 
 import (
 	"log"
-	"main/common"
-	"main/modules/item/entity"
 	"main/modules/item/transport/gin"
 	"net/http"
 	"os"
@@ -41,7 +39,7 @@ func main() {
 		items := v1.Group("/items")
 		{
 			items.POST("", ginItem.CreateItem(db))
-			items.GET("", ListItem(db))
+			items.GET("", ginItem.ListItem(db))
 			items.GET("/:id", ginItem.GetItem(db))
 			items.PATCH("/:id", ginItem.UpdateItem(db))
 			items.DELETE("/:id", ginItem.DeleteItem(db))
@@ -54,41 +52,4 @@ func main() {
 		})
 	})
 	r.Run(":3000") // port 3000
-}
-
-func ListItem(db *gorm.DB) func(*gin.Context) {
-	return func(c *gin.Context) {
-		var paging common.Paging
-		
-		if err := c.ShouldBind(&paging); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-
-		paging.Process()
-
-		var results []entity.TodoItem
-
-		db = db.Where("status <> ?", "Deleted")
-
-		if err := db.Table(entity.TodoItem{}.TableName()).Count(&paging.Total).Error; err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-		
-		if err := db.Order("id desc").
-			Offset((paging.Page - 1) * paging.Limit).
-			Limit(paging.Limit).
-			Find(&results).Error; err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": err.Error(),
-			})
-			return
-		}
-		c.JSON(http.StatusOK, common.NewSuccessResponse(results, paging, nil))
-	}
 }

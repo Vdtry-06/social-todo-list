@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"main/common"
 	"main/modules/item/entity"
 )
 
@@ -9,7 +10,7 @@ func (sql *sqlStore) UpdateItem(ctx context.Context, cond map[string]interface{}
 
 
 	if err := sql.db.Where(cond).Updates(dataUpdate).Error; err != nil {
-		return err
+		return common.ErrDB(err)
 	}
 
 	return nil

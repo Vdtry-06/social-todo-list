@@ -2,6 +2,7 @@ package business
 
 import (
 	"context"
+	"main/common"
 	"main/modules/item/entity"
 )
 
@@ -22,6 +23,9 @@ func (business *deleteItemBusiness) DeleteItemById(ctx context.Context, id int) 
 	data, err := business.store.GetItem(ctx, map[string]interface{}{"id": id}); 
 
 	if err != nil {
+		if err == common.RecordNotFound {
+			return common.ErrCannotDeleteEntity(entity.EntityName, err)
+		}
 		return err
 	}
 

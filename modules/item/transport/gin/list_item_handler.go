@@ -16,9 +16,7 @@ func ListItem(db *gorm.DB) func(*gin.Context) {
 		var paging common.Paging
 		
 		if err := c.ShouldBind(&paging); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
 		
@@ -26,9 +24,7 @@ func ListItem(db *gorm.DB) func(*gin.Context) {
 
 		var filter entity.Filter
 		if err := c.ShouldBind(&filter); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
 

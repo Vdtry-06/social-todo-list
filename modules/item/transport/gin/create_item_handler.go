@@ -16,9 +16,7 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 		var data entity.TodoItemCreation
 
 		if err := c.ShouldBind(&data); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
 
@@ -27,9 +25,7 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 
 		if err := biz.CreateNewItem(c.Request.Context(), &data); err != nil {
 			if err := c.ShouldBind(&data); err != nil {
-				c.JSON(http.StatusBadRequest, gin.H{
-					"error": err.Error(),
-				})
+				c.JSON(http.StatusBadRequest, common.ErrDB(err))
 				return
 			}
 		}

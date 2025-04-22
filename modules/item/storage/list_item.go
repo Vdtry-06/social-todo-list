@@ -24,7 +24,7 @@ func (sql *sqlStore) ListItem(
 	}
 
 	if err := db.Table(entity.TodoItem{}.TableName()).Count(&paging.Total).Error; err != nil {
-		return nil, err
+		return nil, common.ErrDB(err)
 	}
 	
 	if err := db.Order("id desc").

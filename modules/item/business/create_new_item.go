@@ -2,6 +2,7 @@ package business
 
 import (
 	"context"
+	"main/common"
 	"main/modules/item/entity"
 	"strings"
 )
@@ -25,7 +26,7 @@ func (business *createItemBusiness) CreateNewItem(ctx context.Context, data *ent
 	}
 
 	if err := business.store.CreateItem(ctx, data); err != nil {
-		return err
+		return common.ErrCannotCreateEntity(entity.EntityName, err)
 	}
 	return nil
 }

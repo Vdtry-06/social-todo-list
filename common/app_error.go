@@ -35,12 +35,11 @@ func NewErrorResponse(root error, msg, log, key string) *AppError {
 	}
 }
 
-func NewUnauthorized(root error, msg, log, key string) *AppError {
+func NewUnauthorized(root error, msg, key string) *AppError {
 	return &AppError{
 		StatusCode: http.StatusUnauthorized,
 		RootErr:    root,
 		Message:    msg,
-		Log:        log,
 		Key:        key,
 	}
 }
@@ -65,7 +64,7 @@ func NewCustomError(root error, msg, key string) *AppError {
 }
 
 func ErrDB(err error) *AppError {
-	return NewFullErrorResponse(http.StatusInternalServerError, err, "Database error", err.Error(), "DB_ERROR")
+	return NewFullErrorResponse(http.StatusBadRequest, err, "Database error", err.Error(), "DB_ERROR")
 }
 
 func ErrInvalidRequest(err error) *AppError {
@@ -96,7 +95,7 @@ func ErrCannotCreateEntity(entity string, err error) *AppError {
 	return NewCustomError(
 		err,
 		fmt.Sprintf("Cannot create %s", strings.ToLower(entity)),
-		fmt.Sprintf("ErrCannotCreate%s", entity),
+		fmt.Sprintf("ErrCannotCreate %s", entity),
 	)
 }
 

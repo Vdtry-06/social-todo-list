@@ -2,6 +2,7 @@ package business
 
 import (
 	"context"
+	"main/common"
 	"main/modules/item/entity"
 )
 
@@ -21,7 +22,7 @@ func (business *getItemBusiness) GetItemById(ctx context.Context, id int) (*enti
 	data, err := business.store.GetItem(ctx, map[string]interface{}{"id": id}); 
 
 	if err != nil {
-		return nil, err
+		return nil, common.ErrCannotGetEntity(entity.EntityName, err)
 	}
 	return data, nil
 }

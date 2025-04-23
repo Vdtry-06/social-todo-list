@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"main/common"
+	"main/middleware"
 	"main/modules/item/transport/gin"
 	"net/http"
 	"os"
@@ -27,6 +30,8 @@ func main() {
 
 	r := gin.Default()
 
+	r.Use(middleware.Recovery(db))
+
 	// CRUD: Create, Read, Update, Delete
 	// POST: /v1/items (create a new item)
 	// GET: /v1/items (list items) /v1/items/items?page=1 || /v1/items?cursor=fdsfsdk
@@ -47,6 +52,11 @@ func main() {
 	}
 
 	r.GET("/ping", func(c *gin.Context) {
+		go func() {
+			defer common.Recovery()
+			fmt.Println([]int{}[0])
+		}()
+		
 		c.JSON(http.StatusOK, gin.H{
 		"message": "pong",
 		})

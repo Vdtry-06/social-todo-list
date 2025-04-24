@@ -14,3 +14,4 @@
 
 ## mock test
 - `go get github.com/DATA-DOG/go-sqlmock`
+- `go get github.com/stretchr/testify/mock`

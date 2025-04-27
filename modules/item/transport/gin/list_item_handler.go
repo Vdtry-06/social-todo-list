@@ -14,22 +14,21 @@ import (
 func ListItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
 		var paging common.Paging
+		customLimitPage := 10
 		
 		if err := c.ShouldBind(&paging); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
 		
-		paging.Process()
+		paging.Process(customLimitPage)
 
 		var filter entity.Filter
 		if err := c.ShouldBind(&filter); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 			return
 		}
-
-		
-
+	
 		store := storage.NewSQLStore(db)
 		biz := business.NewListItemBusiness(store)
 

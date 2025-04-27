@@ -5,7 +5,7 @@ import (
 	"log"
 	"main/common"
 	"main/middleware"
-	"main/modules/item/transport/gin"
+	ginItem "main/modules/item/transport/gin"
 	"net/http"
 	"os"
 
@@ -61,5 +61,5 @@ func main() {
 		"message": "pong",
 		})
 	})
-	r.Run(":3000") // port 3000
+	r.Run(":8080") // port 3000
 }

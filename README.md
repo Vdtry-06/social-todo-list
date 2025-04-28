@@ -1,6 +1,6 @@
 # social-todo-list
 
-## Create evn
+## Create env
 - `touch main.go`
 - `go mod init main`
 

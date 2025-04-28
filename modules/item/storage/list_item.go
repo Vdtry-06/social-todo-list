@@ -15,7 +15,8 @@ func (sql *sqlStore) ListItem(
 
 	var results []entity.TodoItem
 
-	db := sql.db.Where("status <> ?", "Deleted")
+	// db := sql.db.Where("status <> ?", "Deleted")
+	db := sql.db
 
 	if f := filter; f != nil {
 		if v := f.Status; v != "" {

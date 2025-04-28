@@ -14,7 +14,7 @@ import (
 func ListItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
 		var paging common.Paging
-		customLimitPage := 10
+		customLimitPage := 5
 		
 		if err := c.ShouldBind(&paging); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
